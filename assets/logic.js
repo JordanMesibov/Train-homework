@@ -25,11 +25,65 @@ $(document).ready(function () {
     traindData.firstTrainTime = moment(firstTrainTime, "YYYY-MM-DD").format("X");
 
     // push into db
-    
+    database.ref().push(trainData);
 
+    //clear out the recently filled form elements on the page
+    $("#train-name-input").val("");
+    $("#destination-input").val("");
+    $("#first-train-time-input").val("");
+    $("#frequency-input").val("");
+
+  });
+
+  // set up the child-added event listener for firebase to send new information to the page every time a new train is added via the submission form
+  database.ref().on("child_added", function(childSnapshot) {
+    console.log(childSnapshot.val());
+    var trainName = childSnapshot.val().trainName;
+    var destination = childSnapshot.val().destination;
+    var firstTrainTime = childSnapshot.val().firstTrainTime;
+    var frequency = childSnapshot.val().frequency;
+
+    //console log the key of the child in case I need it
+    console.log(childSnapshot.key);
+
+    //set up math for calculations of next train times
+    var firstTimeConverted = moment(firstTrainTime, "HH:mm").subtract(1, "years");
+    console.log(firstTimeConverted);
+
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+    // Difference between the times
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var tRemainder = diffTime % frequency;
+    console.log(tRemainder);
+
+    // Minute Until Train
+    var tMinutesTillTrain = frequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    // Next Train
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+
+    // create a table row for a train
+   var $tr = $("<tr>");
+   $tr
+     .attr("train-key", childSnapshot.key)
+     .append(`<td>${trainName}</td>`)
+     .append(`<td>${destination}</td>`)
+     .append(`<td>${frequency}</td>`)
+     .append(`<td>${nextTrain}</td>`)
+     .append(`<td>${tMinutesTillTrain}</td>`);
+
+   // select table's body and append employee table row
+   $("tbody#train-info").append($tr);
 
   })
-
 
 
 
