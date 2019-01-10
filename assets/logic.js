@@ -16,7 +16,7 @@ $(document).ready(function () {
     event.preventDefault();
 
     var trainData = {
-      trainName: $("train-name-input").val().trim(),
+      trainName: $("#train-name-input").val().trim(),
       destination: $("#destination-input").val().trim(),
       firstTrainTime: $("#first-train-time-input").val().trim(),
       frequency: $("#frequency-input").val().trim(),
