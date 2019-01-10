@@ -22,8 +22,6 @@ $(document).ready(function () {
       frequency: $("#frequency-input").val().trim(),
     }
 
-    trainData.firstTrainTime = moment(firstTrainTime, "HH:mm").format("X");
-
     // push into db
     database.ref().push(trainData);
 
@@ -77,7 +75,7 @@ $(document).ready(function () {
      .append(`<td>${trainName}</td>`)
      .append(`<td>${destination}</td>`)
      .append(`<td>${frequency}</td>`)
-     .append(`<td>${nextTrain}</td>`)
+     .append(`<td>${nextTrain.format("hh:mm")}</td>`)
      .append(`<td>${tMinutesTillTrain}</td>`);
 
    // select table's body and append employee table row
