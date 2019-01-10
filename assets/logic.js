@@ -22,7 +22,7 @@ $(document).ready(function () {
       frequency: $("#frequency-input").val().trim(),
     }
 
-    traindData.firstTrainTime = moment(firstTrainTime, "YYYY-MM-DD").format("X");
+    traindData.firstTrainTime = moment(firstTrainTime, "HH:mm").format("X");
 
     // push into db
     database.ref().push(trainData);
